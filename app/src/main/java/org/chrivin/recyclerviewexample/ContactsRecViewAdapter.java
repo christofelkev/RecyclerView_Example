@@ -1,15 +1,20 @@
 package org.chrivin.recyclerviewexample;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -33,12 +38,18 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter <ContactsRecVie
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.txtName.setText(contacts.get(position).getName());
+        holder.txtEmail.setText(contacts.get(position).getEmail());
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, contacts.get(position).getName() + " Selected", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Glide.with(context)
+                .asBitmap()
+                .load(contacts.get(position).getImageUrl())
+                .into(holder.image);
 
     }
 
@@ -53,12 +64,16 @@ public class ContactsRecViewAdapter extends RecyclerView.Adapter <ContactsRecVie
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView txtName;
-        private RelativeLayout parent;
+        private TextView txtName, txtEmail;
+        private CardView parent;
+        private ImageView image;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtName = itemView.findViewById(R.id.txtName);
             parent = itemView.findViewById(R.id.parent);
+            txtEmail = itemView.findViewById(R.id.txtEmail);
+
+            image = itemView.findViewById(R.id.image);
 
         }
     }
